@@ -3,10 +3,10 @@ import { NavLink } from "react-router-dom";
 
 const Navbar = () => {
   return (
-    <nav class="navbar navbar-light bg-light mb-2">
-      <div class="container-fluid d-flex justify-content-center">
+    <nav className="navbar navbar-light bg-light mb-2">
+      <div className="container-fluid d-flex justify-content-center">
         <NavLink to="/" className="fs-2 fw-bold">
-          String Calculator
+          String Calculator TDD Kata
         </NavLink>
       </div>
     </nav>
