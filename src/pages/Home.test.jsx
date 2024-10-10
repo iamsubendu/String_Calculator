@@ -1,55 +1,82 @@
-import React from "react";
-import { render, fireEvent, waitFor, screen } from "@testing-library/react";
-import "@testing-library/jest-dom"; // Import jest-dom
+import { render, screen, fireEvent } from "@testing-library/react";
 import Home from "./Home";
+import "@testing-library/jest-dom";
 
-describe("Home component", () => {
-  it("renders input field and calculate button", () => {
+describe("Home Component", () => {
+  it("renders input field", () => {
     render(<Home />);
-    expect(screen.getByRole("textbox")).toBeInTheDocument();
-    expect(
-      screen.getByRole("button", { name: "Calculate" })
-    ).toBeInTheDocument();
+    const inputField = screen.getByTestId("inputString");
+    expect(inputField).toBeInTheDocument();
   });
 
-  it("calls add function with input value on calculate button click", () => {
-    const addMock = jest.fn();
-    render(<Home add={addMock} />);
-    const inputField = screen.getByRole("textbox");
-    const calculateButton = screen.getByRole("button", { name: "Calculate" });
+  it("renders calculate button", () => {
+    render(<Home />);
+    const calculateButton = screen.getByText("Calculate");
+    expect(calculateButton).toBeInTheDocument();
+  });
+
+  it("handles user input and performs calculation", () => {
+    render(<Home />);
+
+    const inputField = screen.getByTestId("inputString");
+    const calculateButton = screen.getByText("Calculate");
 
     fireEvent.change(inputField, { target: { value: "1,2,3" } });
     fireEvent.click(calculateButton);
 
-    expect(addMock).toHaveBeenCalledTimes(1);
-    expect(addMock).toHaveBeenCalledWith("1,2,3");
+    const result = screen.getByText("Result: 6");
+    expect(result).toBeInTheDocument();
   });
 
-  it("displays result when add function returns a value", () => {
-    const addMock = jest.fn(() => 6);
-    render(<Home add={addMock} />);
-    const inputField = screen.getByRole("textbox");
-    const calculateButton = screen.getByRole("button", { name: "Calculate" });
+  it("handles user input and performs calculation", () => {
+    render(<Home />);
 
-    fireEvent.change(inputField, { target: { value: "1,2,3" } });
+    const inputField = screen.getByTestId("inputString");
+    const calculateButton = screen.getByText("Calculate");
+
+    fireEvent.change(inputField, { target: { value: "" } });
     fireEvent.click(calculateButton);
 
-    expect(screen.getByText("Result: 6")).toBeInTheDocument();
+    const result = screen.getByText("Result: 0");
+    expect(result).toBeInTheDocument();
   });
 
-  it("displays error message when add function throws an error", () => {
-    const addMock = jest.fn(() => {
-      throw new Error("Negative numbers not allowed: -1");
-    });
-    render(<Home add={addMock} />);
-    const inputField = screen.getByRole("textbox");
-    const calculateButton = screen.getByRole("button", { name: "Calculate" });
+  it("handles user input and performs calculation", () => {
+    render(<Home />);
 
-    fireEvent.change(inputField, { target: { value: "-1,2,3" } });
+    const inputField = screen.getByTestId("inputString");
+    const calculateButton = screen.getByText("Calculate");
+
+    fireEvent.change(inputField, { target: { value: "1" } });
     fireEvent.click(calculateButton);
 
-    expect(
-      screen.getByText("Error: Negative numbers not allowed: -1")
-    ).toBeInTheDocument();
+    const result = screen.getByText("Result: 1");
+    expect(result).toBeInTheDocument();
+  });
+
+  it("handles user input and performs calculation", () => {
+    render(<Home />);
+
+    const inputField = screen.getByTestId("inputString");
+    const calculateButton = screen.getByText("Calculate");
+
+    fireEvent.change(inputField, { target: { value: "1,5" } });
+    fireEvent.click(calculateButton);
+
+    const result = screen.getByText("Result: 6");
+    expect(result).toBeInTheDocument();
+  });
+
+  it("handles user input and performs calculation", () => {
+    render(<Home />);
+
+    const inputField = screen.getByTestId("inputString");
+    const calculateButton = screen.getByText("Calculate");
+
+    fireEvent.change(inputField, { target: { value: "//;\n1;2" } });
+    fireEvent.click(calculateButton);
+
+    const result = screen.getByText("Result: 3");
+    expect(result).toBeInTheDocument();
   });
 });

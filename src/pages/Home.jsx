@@ -8,15 +8,17 @@ const Home = () => {
   const add = (numbers) => {
     if (!numbers) return 0;
 
-    const delimiter = /[;:,|/\n]/;
+    const delimiter = /[;:,|/\n]/; // Regular expression to match any delimiter
     if (numbers.startsWith("//")) {
-      numbers = numbers.substring(2);
+      numbers = numbers.substring(2); // Remove custom delimiter specifier
     }
     if (numbers.includes("\\n")) {
-      numbers = numbers.replace("\\n", "\n");
+      numbers = numbers.replace("\\n", "\n"); // Handle new lines properly
     }
-    const numberArray = numbers.split(delimiter);
+
+    const numberArray = numbers.split(delimiter); // Split by delimiter
     const negatives = [];
+
     const total = numberArray.reduce((sum, num) => {
       const value = parseInt(num, 10);
       if (isNaN(value) || num === "") return sum;
@@ -53,15 +55,22 @@ const Home = () => {
           placeholder="Enter numbers"
           value={input}
           className="ps-1"
+          data-testid="inputString"
           onChange={(e) => setInput(e.target.value)}
         />
         <button className="btn btn-sm btn-info" onClick={handleCalculate}>
           Calculate
         </button>
         {result !== null && (
-          <p className="text-success text-bold">Result: {result}</p>
+          <p data-testid="success" className="text-success text-bold">
+            Result: {result}
+          </p>
         )}
-        {error && <p className="text-danger text-bold">Error: {error}</p>}
+        {error && (
+          <p data-testid="error" className="text-danger text-bold">
+            Error: {error}
+          </p>
+        )}
       </div>
     </div>
   );
