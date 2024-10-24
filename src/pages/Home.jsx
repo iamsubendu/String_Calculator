@@ -8,26 +8,31 @@ const Home = () => {
   const add = (numbers) => {
     if (!numbers) return 0;
 
-    const delimiter = /[;:,|/\n]/; // Regular expression to match any delimiter
+    const delimiter = /[;:,|/\n]/;
     if (numbers.startsWith("//")) {
-      numbers = numbers.substring(2); // Remove custom delimiter specifier
+      numbers = numbers.substring(2);
     }
     if (numbers.includes("\\n")) {
-      numbers = numbers.replace("\\n", "\n"); // Handle new lines properly
+      numbers = numbers.replace("\\n", "\n");
     }
 
-    const numberArray = numbers.split(delimiter); // Split by delimiter
+    const numberArray = numbers.split(delimiter);
     const negatives = [];
+    const nonDigit = [];
 
     const total = numberArray.reduce((sum, num) => {
       const value = parseInt(num, 10);
-      if (isNaN(value) || num === "") return sum;
-      if (value < 0) negatives.push(value);
+      if (isNaN(value) || num === "") nonDigit.push(num);
+      if (value < 0) negatives.push(num);
       return sum + value;
     }, 0);
 
     if (negatives.length > 0) {
       throw new Error(`Negative numbers not allowed: ${negatives.join(", ")}`);
+    }
+
+    if (nonDigit.length > 0) {
+      throw new Error(`${nonDigit[0]} is not allowed`);
     }
 
     return total;
